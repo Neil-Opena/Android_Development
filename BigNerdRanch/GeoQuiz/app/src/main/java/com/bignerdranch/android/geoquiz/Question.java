@@ -3,10 +3,12 @@ package com.bignerdranch.android.geoquiz;
 public class Question {
     private int mTextResId;
     private boolean mAnswerTrue;
+    private boolean mCompleted;
 
-    public Question(int textResId, boolean answerTrue){
+    public Question(int textResId, boolean answerTrue, boolean completed){
         this.mTextResId = textResId;
         this.mAnswerTrue = answerTrue;
+        this.mCompleted = completed;
     }
 
     public int getTextResId() {
@@ -23,5 +25,13 @@ public class Question {
 
     public void setAnswerTrue(boolean answerTrue) {
         mAnswerTrue = answerTrue;
+    }
+
+    public boolean isCompleted(){
+        return this.mCompleted;
+    }
+
+    public void setCompleted(boolean completed){
+        this.mCompleted = completed;
     }
 }
