@@ -80,10 +80,8 @@ public class QuizActivity extends AppCompatActivity {
 
         if(mQuestionArrayList.get(mCurrentIndex).isCompleted()){
             disableButtons();
-            Log.d(TAG, "BRUH");
         }else{
             enableButtons();
-            Log.d(TAG, "BRUhhh");
         }
 
         mNextButton = (ImageButton) findViewById(R.id.next_button);

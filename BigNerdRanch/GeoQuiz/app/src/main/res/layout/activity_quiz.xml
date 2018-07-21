@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/prev_button"
             android:src="@drawable/arrow_left"
-            android:contentDescription="previous button"
+            android:contentDescription="@string/prev_button"
             />
 
         <ImageButton
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/next_button"
             android:src="@drawable/arrow_right"
-            android:contentDescription="next button"
+            android:contentDescription="@string/next_button"
             />
 
     </LinearLayout>
