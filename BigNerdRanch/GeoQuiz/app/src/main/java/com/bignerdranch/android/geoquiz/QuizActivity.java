@@ -21,6 +21,7 @@ public class QuizActivity extends AppCompatActivity {
     private static final String KEY_ANSWERED = "answered";
     private static final String KEY_CORRECT = "correct";
     private static final String KEY_LIST = "list";
+    private static final String KEY_TOKENS = "tokens";
     private static final int REQUEST_CODE_CHEAT = 0;
 
     private Button mTrueButton;
@@ -29,12 +30,14 @@ public class QuizActivity extends AppCompatActivity {
     private ImageButton mNextButton;
     private ImageButton mPrevButton;
     private TextView mQuestionTextView;
+    private TextView mTokenTextView;
 
     private ArrayList<Question> mQuestionArrayList;
 
     private int mCurrentIndex = 0;
     private int mAnsweredQuestions = 0;
     private int mCorrect = 0;
+    private int mCheatTokens = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,7 @@ public class QuizActivity extends AppCompatActivity {
             mAnsweredQuestions = savedInstanceState.getInt(KEY_ANSWERED, 0);
             mCorrect = savedInstanceState.getInt(KEY_CORRECT, 0);
             mQuestionArrayList = (ArrayList<Question>) savedInstanceState.getSerializable(KEY_LIST);
+            mCheatTokens = savedInstanceState.getInt(KEY_TOKENS);
         }else{
             //initialize the questions
             mQuestionArrayList = new ArrayList<>();
@@ -114,6 +118,9 @@ public class QuizActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_CODE_CHEAT);
             }
         });
+
+        mTokenTextView = (TextView) findViewById(R.id.cheat_tokens);
+        mTokenTextView.setText("Cheat Tokens: " + mCheatTokens);
 
         //initialize the first question
         updateQuestion();
@@ -199,6 +206,11 @@ public class QuizActivity extends AppCompatActivity {
                 return;
             }
             boolean cheated = CheatActivity.wasAnswerShown(data);
+            mCheatTokens--;
+            if(mCheatTokens <= 0){
+                mCheatButton.setEnabled(false);
+            }
+            mTokenTextView.setText("Cheat Tokens: " + mCheatTokens);
             mQuestionArrayList.get(mCurrentIndex).setCheated(cheated);
         }
     }
@@ -229,6 +241,7 @@ public class QuizActivity extends AppCompatActivity {
         savedInstanceState.putInt(KEY_ANSWERED, mAnsweredQuestions);
         savedInstanceState.putInt(KEY_CORRECT, mCorrect);
         savedInstanceState.putSerializable(KEY_LIST, mQuestionArrayList);
+        savedInstanceState.putInt(KEY_TOKENS, mCheatTokens);
     }
 
     @Override

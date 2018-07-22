@@ -30,13 +30,24 @@
 
     </LinearLayout>
 
-    <Button
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/cheat_button"
-        android:text="@string/cheat_button"
-        android:layout_gravity="bottom|center_horizontal"/>
+        android:layout_gravity="bottom|center_horizontal">
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cheat_button"
+            android:text="@string/cheat_button"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cheat_tokens" />
+
+    </LinearLayout>
 
     <ImageButton
         android:layout_width="wrap_content"
