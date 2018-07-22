@@ -11,6 +11,8 @@ import android.widget.TextView;
 public class CheatActivity extends AppCompatActivity {
 
     private static final String EXTRA_ANSWER_IS_TRUE = "com.bignerdranch.android.geoquiz.answer_is_true";
+    private static final String EXTRA_ANSWER_SHOWN = "com.bignerdranch.android.qeoquiz.answer_shown";
+    private static final String KEY_TEXT_VIEW = "text_view";
 
     private boolean mAnswerIsTrue;
 
@@ -26,6 +28,15 @@ public class CheatActivity extends AppCompatActivity {
 
         mAnswerTextView = (TextView) findViewById(R.id.answer_text_view);
 
+        if(savedInstanceState != null){
+            String previousText = (String) savedInstanceState.get(KEY_TEXT_VIEW);
+            mAnswerTextView.setText(previousText);
+
+            if(!previousText.isEmpty()){
+                setAnswerShownResult(true);
+            }
+        }
+
         mShowAnswerButton = (Button) findViewById(R.id.show_answer_button);
         mShowAnswerButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -35,6 +46,7 @@ public class CheatActivity extends AppCompatActivity {
                 }else{
                     mAnswerTextView.setText(R.string.false_button);
                 }
+                setAnswerShownResult(true);
             }
         });
     }
@@ -42,5 +54,21 @@ public class CheatActivity extends AppCompatActivity {
     public static Intent newIntent(Context packageContext, boolean answerIsTrue){
         Intent intent = new Intent(packageContext, CheatActivity.class);
         return intent.putExtra(EXTRA_ANSWER_IS_TRUE, answerIsTrue);
+    }
+
+    public static boolean wasAnswerShown(Intent result){
+        return result.getBooleanExtra(EXTRA_ANSWER_SHOWN, false);
+    }
+
+    private void setAnswerShownResult(boolean isAnswerShown){
+        Intent data = new Intent();
+        data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
+        setResult(RESULT_OK, data);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putString(KEY_TEXT_VIEW, mAnswerTextView.getText().toString());
     }
 }

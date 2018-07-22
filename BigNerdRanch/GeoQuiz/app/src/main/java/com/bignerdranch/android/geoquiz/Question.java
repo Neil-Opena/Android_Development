@@ -6,11 +6,13 @@ public class Question implements Serializable{
     private int mTextResId;
     private boolean mAnswerTrue;
     private boolean mCompleted;
+    private boolean mCheated;
 
-    public Question(int textResId, boolean answerTrue, boolean completed){
+    public Question(int textResId, boolean answerTrue, boolean completed, boolean cheated){
         this.mTextResId = textResId;
         this.mAnswerTrue = answerTrue;
         this.mCompleted = completed;
+        this.mCheated = cheated;
     }
 
     public int getTextResId() {
@@ -35,5 +37,13 @@ public class Question implements Serializable{
 
     public void setCompleted(boolean completed){
         this.mCompleted = completed;
+    }
+
+    public boolean isCheated(){
+        return this.mCheated;
+    }
+
+    public void setCheated(boolean cheated){
+        this.mCheated = cheated;
     }
 }

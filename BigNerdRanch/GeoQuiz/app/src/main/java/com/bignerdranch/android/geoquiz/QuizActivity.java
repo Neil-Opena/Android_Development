@@ -1,5 +1,6 @@
 package com.bignerdranch.android.geoquiz;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ public class QuizActivity extends AppCompatActivity {
     private static final String KEY_ANSWERED = "answered";
     private static final String KEY_CORRECT = "correct";
     private static final String KEY_LIST = "list";
+    private static final int REQUEST_CODE_CHEAT = 0;
 
     private Button mTrueButton;
     private Button mFalseButton;
@@ -46,15 +48,15 @@ public class QuizActivity extends AppCompatActivity {
             mCorrect = savedInstanceState.getInt(KEY_CORRECT, 0);
             mQuestionArrayList = (ArrayList<Question>) savedInstanceState.getSerializable(KEY_LIST);
         }else{
+            //initialize the questions
             mQuestionArrayList = new ArrayList<>();
-            mQuestionArrayList.add(new Question(R.string.question_australia, true, false));
-            mQuestionArrayList.add(new Question(R.string.question_oceans, true, false));
-            mQuestionArrayList.add(new Question(R.string.question_mideast, false, false));
-            mQuestionArrayList.add(new Question(R.string.question_africa, false, false));
-            mQuestionArrayList.add(new Question(R.string.question_americas, true, false));
-            mQuestionArrayList.add(new Question(R.string.question_asia, true, false));
+            mQuestionArrayList.add(new Question(R.string.question_australia, true, false, false));
+            mQuestionArrayList.add(new Question(R.string.question_oceans, true, false, false));
+            mQuestionArrayList.add(new Question(R.string.question_mideast, false, false, false));
+            mQuestionArrayList.add(new Question(R.string.question_africa, false, false, false));
+            mQuestionArrayList.add(new Question(R.string.question_americas, true, false, false));
+            mQuestionArrayList.add(new Question(R.string.question_asia, true, false, false));
         }
-
 
         mQuestionTextView = (TextView) findViewById((R.id.question_text_view));
         mQuestionTextView.setOnClickListener(new View.OnClickListener(){
@@ -109,7 +111,7 @@ public class QuizActivity extends AppCompatActivity {
                 //start cheat activity
                 boolean answerIsTrue = mQuestionArrayList.get(mCurrentIndex).isAnswerTrue();
                 Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_CHEAT);
             }
         });
 
@@ -155,11 +157,15 @@ public class QuizActivity extends AppCompatActivity {
 
         int messageResId;
 
-        if(userPressedTrue == answerIsTrue){
-            messageResId = R.string.correct_toast;
-            mCorrect++;
+        if(curr.isCheated()){
+            messageResId = R.string.judgment_toast;
         }else{
-            messageResId = R.string.incorrect_toast;
+            if(userPressedTrue == answerIsTrue){
+                messageResId = R.string.correct_toast;
+                mCorrect++;
+            }else{
+                messageResId = R.string.incorrect_toast;
+            }
         }
 
         Toast toast = Toast.makeText(this, messageResId, Toast.LENGTH_SHORT);
@@ -178,6 +184,22 @@ public class QuizActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(this, "Grade: " + String.format("%.2f",percentage) + "%", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.TOP, toast.getXOffset(),toast.getYOffset());
             toast.show();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(resultCode != Activity.RESULT_OK){
+            return;
+        }
+
+        if(requestCode == REQUEST_CODE_CHEAT){
+            //checks if this parent sent the request
+            if(data == null){
+                return;
+            }
+            boolean cheated = CheatActivity.wasAnswerShown(data);
+            mQuestionArrayList.get(mCurrentIndex).setCheated(cheated);
         }
     }
 
