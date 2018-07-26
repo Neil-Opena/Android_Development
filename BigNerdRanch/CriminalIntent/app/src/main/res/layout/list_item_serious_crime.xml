@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="#10777777">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/crime_title"
+        android:text="Crime Title"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/crime_date"
+        android:text="Crime Date"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/contact_police_label"
+        android:background="#30990000"
+        android:layout_gravity="center_horizontal"
+        android:padding="8dp"
+        android:layout_marginTop="3dp"
+        android:textSize="12dp"
+        android:id="@+id/crime_police_button"/>
+
+
+</LinearLayout>
