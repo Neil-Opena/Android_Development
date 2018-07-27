@@ -10,9 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+import java.util.Date;
 import java.util.List;
 
 public class CrimeListFragment extends Fragment{
@@ -44,6 +49,7 @@ public class CrimeListFragment extends Fragment{
 
         private TextView mTitleTextView;
         private TextView mDateTextView;
+        private ImageView mSolvedImageView;
 
         private Crime mCrime;
 
@@ -53,12 +59,17 @@ public class CrimeListFragment extends Fragment{
 
             mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
             mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
+            mSolvedImageView = (ImageView) itemView.findViewById(R.id.crime_solved);
         }
 
         public void bind(Crime crime){
             mCrime = crime;
             mTitleTextView.setText(crime.getTitle());
-            mDateTextView.setText(crime.getDate().toString());
+
+            DateFormat format = DateFormat.getDateInstance(DateFormat.FULL);
+
+            mDateTextView.setText(format.format(crime.getDate()));
+            mSolvedImageView.setVisibility(crime.isSolved()? View.VISIBLE : View.GONE);
         }
 
         @Override
