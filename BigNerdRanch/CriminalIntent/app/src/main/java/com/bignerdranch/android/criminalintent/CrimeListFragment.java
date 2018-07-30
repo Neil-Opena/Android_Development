@@ -1,10 +1,10 @@
 package com.bignerdranch.android.criminalintent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
-import java.util.Date;
 import java.util.List;
 
 public class CrimeListFragment extends Fragment{
@@ -37,12 +34,23 @@ public class CrimeListFragment extends Fragment{
         return view;
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateUI();
+    }
+
     private void updateUI(){
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
 
-        mAdapter = new CrimeAdapter(crimes);
-        mCrimeRecyclerView.setAdapter(mAdapter);
+        if(mAdapter == null){
+            mAdapter = new CrimeAdapter(crimes);
+            mCrimeRecyclerView.setAdapter(mAdapter);
+        }else{
+            mAdapter.notifyDataSetChanged();
+        }
+
     }
 
     private abstract class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -74,7 +82,8 @@ public class CrimeListFragment extends Fragment{
 
         @Override
         public void onClick(View v){
-            Toast.makeText(getActivity(), mCrime.getTitle() + " clicked!", Toast.LENGTH_SHORT).show();
+            Intent intent = CrimeActivity.newIntent(getContext(), mCrime.getId());
+            startActivity(intent);
         }
 
         protected Crime getCrime(){
@@ -103,6 +112,12 @@ public class CrimeListFragment extends Fragment{
                     toast.show();
                 }
             });
+        }
+
+        @Override
+        public void bind(Crime crime){
+            super.bind(crime);
+            mContactPoliceButton.setEnabled(!crime.isSolved());
         }
 
     }
