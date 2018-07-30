@@ -65,7 +65,7 @@ public class CrimeListFragment extends Fragment{
             if(data == null){
                 return;
             }
-            UUID crimeId = (UUID) data.getSerializableExtra(CrimeActivity.EXTRA_CRIME_ID);
+            UUID crimeId = (UUID) data.getSerializableExtra(CrimePagerActivity.EXTRA_CRIME_ID);
             int position =  CrimeLab.get(getContext()).getPosition(crimeId);
             mAdapter.notifyItemChanged(position);
         }
@@ -100,7 +100,7 @@ public class CrimeListFragment extends Fragment{
 
         @Override
         public void onClick(View v){
-            Intent intent = CrimeActivity.newIntent(getContext(), mCrime.getId());
+            Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
             startActivityForResult(intent, REQUEST_CRIME);
         }
 
