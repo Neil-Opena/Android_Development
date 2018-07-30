@@ -16,8 +16,11 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.List;
+import java.util.UUID;
 
 public class CrimeListFragment extends Fragment{
+
+    private static final int REQUEST_CRIME = 1;
 
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
@@ -34,11 +37,11 @@ public class CrimeListFragment extends Fragment{
         return view;
     }
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        updateUI();
-    }
+//    @Override
+//    public void onResume(){
+//        super.onResume();
+//        updateUI();
+//    }
 
     private void updateUI(){
         CrimeLab crimeLab = CrimeLab.get(getActivity());
@@ -50,7 +53,22 @@ public class CrimeListFragment extends Fragment{
         }else{
             mAdapter.notifyDataSetChanged();
         }
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(resultCode != getActivity().RESULT_OK){
+            return;
+        }
+
+        if(requestCode == REQUEST_CRIME){
+            if(data == null){
+                return;
+            }
+            UUID crimeId = (UUID) data.getSerializableExtra(CrimeActivity.EXTRA_CRIME_ID);
+            int position =  CrimeLab.get(getContext()).getPosition(crimeId);
+            mAdapter.notifyItemChanged(position);
+        }
     }
 
     private abstract class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -83,7 +101,7 @@ public class CrimeListFragment extends Fragment{
         @Override
         public void onClick(View v){
             Intent intent = CrimeActivity.newIntent(getContext(), mCrime.getId());
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CRIME);
         }
 
         protected Crime getCrime(){
