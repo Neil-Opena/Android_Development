@@ -37,11 +37,11 @@ public class CrimeListFragment extends Fragment{
         return view;
     }
 
-//    @Override
-//    public void onResume(){
-//        super.onResume();
-//        updateUI();
-//    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateUI();
+    }
 
     private void updateUI(){
         CrimeLab crimeLab = CrimeLab.get(getActivity());
@@ -52,22 +52,6 @@ public class CrimeListFragment extends Fragment{
             mCrimeRecyclerView.setAdapter(mAdapter);
         }else{
             mAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(resultCode != getActivity().RESULT_OK){
-            return;
-        }
-
-        if(requestCode == REQUEST_CRIME){
-            if(data == null){
-                return;
-            }
-            UUID crimeId = (UUID) data.getSerializableExtra(CrimePagerActivity.EXTRA_CRIME_ID);
-            int position =  CrimeLab.get(getContext()).getPosition(crimeId);
-            mAdapter.notifyItemChanged(position);
         }
     }
 
@@ -92,9 +76,7 @@ public class CrimeListFragment extends Fragment{
             mCrime = crime;
             mTitleTextView.setText(crime.getTitle());
 
-            DateFormat format = DateFormat.getDateInstance(DateFormat.FULL);
-
-            mDateTextView.setText(format.format(crime.getDate()));
+            mDateTextView.setText(Crime.getFormatedDate(mCrime.getDate()));
             mSolvedImageView.setVisibility(crime.isSolved()? View.VISIBLE : View.GONE);
         }
 
