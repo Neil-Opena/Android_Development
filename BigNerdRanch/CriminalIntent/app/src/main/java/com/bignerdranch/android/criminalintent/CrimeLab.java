@@ -21,15 +21,10 @@ public class CrimeLab {
 
     private CrimeLab(Context context){
         mCrimes = new ArrayList<>();
+    }
 
-        //random crime generation
-        for(int i = 0; i < 100; i++){
-            Crime crime = new Crime();
-            crime.setTitle("Crime #" + i);
-            crime.setSolved(i % 2 == 0); //every other one
-            crime.setRequiresPolice(i % 5 == 0); //every 5 crimes
-            mCrimes.add(crime);
-        }
+    public void addCrime(Crime c){
+        mCrimes.add(c);
     }
 
     public List<Crime> getCrimes(){
@@ -46,11 +41,4 @@ public class CrimeLab {
         return null;
     }
 
-    public int getPosition(UUID id){
-        for(int i = 0; i < mCrimes.size(); i++){
-            if(mCrimes.get(i).getId().equals(id))
-                return i;
-        }
-        return -1;
-    }
 }
